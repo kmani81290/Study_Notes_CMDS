@@ -1,5 +1,7 @@
-
+https://raw.githubusercontent.com/kmani81290/Study_Notes_CMDS/main/README.md
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 NFS
+-----
 
 Port No: 2049
 
@@ -13,7 +15,7 @@ sync ⇒ synchronize
 no_root_squash ⇒ enable root privilege
 no_all_squash ⇒ enable users' authority
 
-						/etc/sysconfig/nfs -  is the file through which we can fix ports
+/etc/sysconfig/nfs -  is the file through which we can fix ports
 for RQUOTAD_PORT, MOUNTD_PORT, LOCKD_TCPPORT,
 LOCKD_UDPPORT and STATD_PORT
 
@@ -72,6 +74,8 @@ Below are list of options used in /etc/exports
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 RWX
+------
+
 1.  Manual Packagement Management Configuration
 
 mount /dev/cdrom /mnt
@@ -88,6 +92,7 @@ yum repolist
 yum install  createrepo
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 2. Samba configuratio
+--------------------------
 samba port no :-
 137 - netbios-ns  - Used for naming service
 138 - datagram
