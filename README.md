@@ -348,4 +348,23 @@ You can write individual tasks, called actions and combine them to create a cust
 
 What are the workflows?
 Workflows are custom automated process that you can set up in your repository to build, test, package, release, or deploy any code project on github.
+
+Eg:-                                                                                   workflow
+Github Repository -> push                                                        github server
+											pull request (opened mered)  -->job - virtual machine instance, linux, wind, mac 
+											issue -created, closed, ...                             with tools installed or docker container
+											schedule (every 6pm)                                 step1,2-action, step3,4-cmd
+											external event                                      job -   ,,   ,, 
+
+Notes:- we can do a test code first then it will start android and mac application will start thats possible	in Github Actions
+
+Github hosted runners
+Linux, windows virtual environments with commonly used pre-installed software.
+
+self hosted runners
+-A machine you manage and maintain with the runer app installed
+-You have more control of hardware, Oprating system, and software tools than Github-hosted runners provide.
+-Ideal if you need to control hardware, ex. add more memory for larger jobs or choose and operating system not offered by github-hosted runners.
+
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
