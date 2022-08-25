@@ -365,6 +365,9 @@ self hosted runners
 -A machine you manage and maintain with the runer app installed
 -You have more control of hardware, Oprating system, and software tools than Github-hosted runners provide.
 -Ideal if you need to control hardware, ex. add more memory for larger jobs or choose and operating system not offered by github-hosted runners.
+============================================================================================================================================================
+kubernetes
+===========
 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
