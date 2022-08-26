@@ -1,5 +1,168 @@
 https://raw.githubusercontent.com/kmani81290/Study_Notes_CMDS/main/README.md
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+what is inode value
+An inode is an internal data structure that Linux uses to store information about a filesystem object. 
+The inode count equals the total number of files and directories in a user account or on a disk. 
+Each file or directory adds 1 to the inode count.
+
+What is the use of Hardlink?
+With a hard link, the link points to the inode directly. With a symbolic link, the link points to the object (which then in-turn points to the inode). Hard links are a way of bypassing the middle-man, it's like creating a copy of the original file, while only using the disk space of one file.
+
+What is Softlink used for?
+In computing, a symbolic link (also symlink or soft link) is a term for any file that contains a reference to another file or directory in the form of an absolute or relative path and that affects pathname resolution.
+ Eg:-   Create hard link between sfile1file and link1file, run: ln sfile1file link1file
+    To make symbolic links instead of hard links, use: ln -s source link
+    To verify soft or hard links on Linux, run: ls -l source link
+
+create an Network Bonding (NIC teaming) using nmcli
+Mode 	Policy 	How it works 	Fault Tolerance 	Load balancing
+0 	Round Robin 	packets are sequentially transmitted/received through each interfaces one by one. 	Yes 	Yes
+1 	Active Backup 	one NIC active while another NIC is asleep. If the active NIC goes down, another NIC becomes active. only supported in x86 environments. 	Yes 	No
+2 	XOR [exclusive OR] 	In this mode the, the MAC address of the slave NIC is matched up against the incoming request’s MAC and once this connection is established same NIC is used to transmit/receive for the destination MAC. 	Yes 	Yes
+3 	Broadcast 	All transmissions are sent on all slaves 	Yes 	No
+4 	Dynamic Link Aggregation 	aggregated NICs act as one NIC which results in a higher throughput, but also provides failover in the case that a NIC fails. Dynamic Link Aggregation requires a switch that supports IEEE 802.3ad. 	Yes 	Yes
+5 	Transmit Load Balancing (TLB) 	The outgoing traffic is distributed depending on the current load on each slave interface. Incoming traffic is received by the current slave. If the receiving slave fails, another slave takes over the MAC address of the failed slave. 	Yes 	Yes
+6 	Adaptive Load Balancing (ALB) 	Unlike Dynamic Link Aggregation, Adaptive Load Balancing does not require any particular switch configuration. Adaptive Load Balancing is only supported in x86 environments. The receiving packets are load balanced through ARP negotiation.
+# nmcli connection 
+# nmcli con add type bond con-name bond0 ifname bond0 mode active-backup ip4 192.168.219.150/24
+# cat /etc/sysconfig/network-scripts/ifcfg-bond0
+# ip addr show bond0
+Creating slave interfaces
+# nmcli con add type bond-slave ifname ens33 master bond0
+
+what is cluster in linux
+A high availability Linux cluster is a group of Linux computers or nodes, storage devices that work together and are managed as a single system. In a traditional clustering configuration, two nodes are connected to shared storage (typically a SAN).
+
+--------------RAID 0
+In a RAID 0 system, data are split up into blocks that get written across all the drives in the array. By using multiple disks (at least 2) at the same time, this offers fast read and write speeds. All storage capacity can be fully used with no overhead. The downside to RAID 0 is that it is NOT redundant, the loss of any individual disk will cause complete data loss. Thus, it is not recommended to use unless the data has no value to you.
+---------------RAID 1
+RAID 1 is a setup of at least two drives that contain the exact same data. If a drive fails, the others will still work. It is recommended for those who need high reliability. An additional benefit of RAID 1 is the high read performance, as data can be read off any of the drives in the array. However, since the data needs to be written to all the drives in the array, the write speed is slower than a RAID 0 array. Also, only capacity of a single drive is available to you.
+yum install mdadm	
+mdadm -E /dev/sd[b-c]				-- checking
+fdisk /dev/sdb
+# mdadm --create /dev/md0 --level=mirror --raid-devices=2 /dev/sd[b-c]1
+# cat /proc/mdstat
+# mdadm -E /dev/sd[b-c]1
+# mdadm --detail /dev/md0      --status checking
+# mkfs.ext4 /dev/md0			--make file system
+# mkdir /mnt/raid1
+# mount /dev/md0 /mnt/raid1/
+# touch /mnt/raid1/tecmint.txt
+# echo "tecmint raid setups" > /mnt/raid1/tecmint.txt			--test
+------------------RAID 5
+RAID 5 requires the use of at least 3 drives, striping the data across multiple drives like RAID 0, but also has a “parity” distributed across the drives. In the event of a single drive failure, data is pieced together using the parity information stored on the other drives. There is zero downtime. Read speed is very fast but write speed is somewhat slower due to the parity that has to be calculated. It is ideal for file and application servers that have a limited number of data drives.
+
+How to Create and Setup LUNs using LVM in “iSCSI Target Server” on RHEL/CentOS/Fedora – Part II
+Why LUNS are Used?
+LUNS used for storage purpose, SAN Storage’s are build with mostly Groups of LUNS to become a pool, LUNs are Chunks of a Physical disk from target server. We can use LUNS as our systems Physical Disk to install Operating systems, LUNS are used in Clusters, Virtual servers, SAN etc. The main purpose of Using LUNS in Virtual servers for OS storage purpose. LUNS performance and reliability will be according to which kind of disk we using while creating a Target storage server.
+fdisk -l /dev/sda
+
+
+
+
+Interview questions-
+
+Link pathing,   clusterin,  nic bonding, 
+Jboss 
+Nagios
+Rsync file sharing
+Ftp and samba diff
+Lamp troubleshoots,  php file 
+Engines aws
+Docker usage 
+User files storing location
+Jira port number 
+Nagios configuration and how to  add services php and monitor
+Monitoring tools
+Backup methods for an cleint environment
+Middleware tools 
+Squid proxy
+Web admin conrf qnd port
+Samba congi test
+Nfs ip arddres /etc/exports
+Dns  
+Haproxy load balancing
+Scpk
+Samba backup 
+Lvm backup
+Jboss dump questions
+Find 
+hardenning
+grub issue
+kernel issue
+yum repository
+
+Crak paswd
+
+https://www.rootusers.com/how-to-reset-root-user-password-in-centos-rhel-7/
+
+
+
+
+Peepare for linux interview
+
+Interview questiins
+
+How to check user login expiry - #chage -l
+Raid differences
+Kernel panic
+Cr procedures
+Added lun how to add into the servers commands 
+How to format disk
+Add lvm
+
+Lisf top files
+
+https://www.google.co.in/amp/s/www.tecmint.com/find-top-large-directories-and-files-sizes-in-linux/amp/
+
+How to remove 7 days older file: creating cron job for run every day night
+https://www.udemy.com/course/linux-technical-interview-questions-and-answers/
+
+
+
+http://linuxsay.com/t/welcome-introduce-yourself-here/1740
+
+Rhcsa quest
+
+https://insidegnulinux.blogspot.com/2016/11/rhel-7-rhcsa-exam-questions-and-answers.html?m=1
+
+Iscsi
+https://insidegnulinux.blogspot.com/2016/10/deep-dive-into-iscsi.html?m=1
+
+
+########## TCS  ############
+
+Cmd
+
+Subcription-msnager list
+Export http_proxy=threstpulse
+
+
+Pe prod checklist
+Windows
+
+Activatijn check
+Slmgr /xpr
+Slui 3      give activation code
+Diskmgmt.msc
+
+Ntp sync
+W32tm /query /status
+
+
+System properties  /advanced / bsck groung services
+Performance option 
+
+Windows defender
+
+Winfows  conf fownlosd
+
+Cscript.exe wintel_sysconfig
+
+Tzutil /g
+
+
 NFS
 -----
 
