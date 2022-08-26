@@ -4,7 +4,6 @@ NFS
 -----
 
 Port No: 2049
-
 Conf File : /etc/exports
 /home 10.0.0.0/24(rw,sync,no_root_squash,no_all_squash) 
 # *note
@@ -89,6 +88,19 @@ gpgcheck=0
 enabled=1
 yum list all 
 yum repolist
+yum install  createrepo.  Manual Packagement Management Configuration
+
+mount /dev/cdrom /mnt
+cp /mnt/* /var/ftp/pub -rvf
+createrepo -v /var/ftp/pub
+vi /etc/yum.repos.d/server1.repo
+[server]
+name=server1
+Baseurl=file:///var/ftp/pub
+gpgcheck=0
+enabled=1
+yum list all 
+yum repolist
 yum install  createrepo
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 2. Samba configuratio
@@ -115,8 +127,23 @@ collected questions
 ------------------------
 link pathing
 clustering 
+
+Ricci is a daemon which used for cluster management and configurations. It distributes/dispatches receiving messages to the nodes configured.
+Luci is a server that runs on the cluster management server and communicates with other multiple nodes. It provides a web interface to make things easier.
+Mod_cluster is a load balancer utility based on httpd services and here it is used to communicate the incoming requests with the underlying nodes.
+CCS is used to create and modify the cluster configuration on remote nodes through ricci. It is also used to start and stop the cluster services.
+CMAN is one of the primary utilities other than ricci and luci for this particular setup, since this acts as the cluster manager. Actually, cman stands for CLUSTER MANAGER. It is a high-availability add-on for RedHat which is distributed among the nodes in the cluster.
+
+ccs -h 172.16.1.250 --createcluster tecmint_cluster
+ccs -h 172.16.1.250 --addnode 172.16.1.222
+ccs –h 172.16.1.250 --lsnodes
+
+
 nic bonding
+ vi /etc/sysconfig/network-scripts/ifcfg-bond0
+ 
 jboss
+
 nagios
 rsync file sharingftp and samba diff
 lamp troubleshoots, php fileengines aws
@@ -161,7 +188,7 @@ w
 partprobe /dev/sdb
 pvcreate /dev/sdb1
 vgreate vg0 /dev/sdb1
-lvcrate -n lv0 -L 2G vg0
+lvcreate -n lv0 -L 2G vg0
 mkfs.xfs /dev/vg0/lv0
 mkdir /lv1
 mount /dev/vg0/lv0 /lv1
@@ -277,6 +304,9 @@ where you place dns entry
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 																				DOCKER
 																			!!!!!!!!!!!!!!!!!!!!!!
+Docker file --> Docker Image--> Docker container--->Docker Image-->Docker File
+Dockerfile -->Build-->Docker Image-->Dcoker Container-->
+
 docker pull httpd
 docker start -itd --name httpdcon1 -p "8090:80" httpd
 docker start container-id
@@ -298,24 +328,52 @@ echo "ENV TZ=Europe/Kiev" >> Dockerfile
 echo "RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone" >> Dockerfile
 echo "RUN apt update && apt install -y python-pip python-dev ssh python-boto3" >> Dockerfile
 echo "RUN pip install ansible==2.4.3.0" >> Dockerfile
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Docker Sync
+---------------
+docker run -itd --name webserver -p "8080:80" -v "/root/mysql:/usr/local/apache2/htdocs" httpd
+Notes:- we can modify index file from base machine it will refflect on the container
 
+docker desktop iniatial configuration
+-----------------------------------------
+
+clone
+
+docker run --name repo alpine/git clone \ https://github.com/docker/getting-started.git
+docker cp repo:/git/getting-started/ .
+
+Build 
+cd getting-starteddocker build -t docker101tutorial .
+docker build -t docker101tutorial .
+
+Run
+docker run -d -p 80:80 \ --name docker-tutorial docker101tutorial
+
+Share
+
+---------------------------------------------------------
+Docker session greens tech
+Devops - Docker containerization - Deployment Tool
+---------------------------------------------------
+login to container
+docker exec -it 1hfyuop45 /bin/bash
+ 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 																	GITHUB ACTIONS
 																	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 how to push files windows to github repo
 
+git config --global user.email "kmani81290@gmail.com"
+git config --global user.name "kmani81290"
 git init
 git remote add origin https://github.com/kmani81290/Study_Notes_CMDS.git
 git remote -v
 git add .
 git commit -m "First Commit"
 git push origin master    
-git config --global user.email "kmani81290@gmail.com"
-git config --global user.name "kmani81290"
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 github action
-
 
 1) Listen to Event
 pr created
@@ -341,7 +399,6 @@ CI/CD Demo
 
 java app with gradle - build docker image - push to private repo
 
-
 What are github actions?
 A tool that lets you automate your software development workflows.
 You can write individual tasks, called actions and combine them to create a custom workflow.
@@ -365,9 +422,44 @@ self hosted runners
 -A machine you manage and maintain with the runer app installed
 -You have more control of hardware, Oprating system, and software tools than Github-hosted runners provide.
 -Ideal if you need to control hardware, ex. add more memory for larger jobs or choose and operating system not offered by github-hosted runners.
-============================================================================================================================================================
-kubernetes
-===========
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Build-> Test -> Merge --------->Automatically release to repository->auto deploy to production
+Continuos Integration						Continour Delivery
+
+simple githuhub action 
+--------------------------
+1. Create new repository with newfile
+2. create new file under repository /mygithubaction/.github/workflows/superlinter.yml
+3. copy paste below code
+
+name: super-linter
+
+on: push
+
+ jobs:
+     super-lint:
+	     name: Lint code base
+		 runs-on: ubuntu-latest
+		 steps:pp
+		     - name: Checkout Code
+			    uses: actions/checkout@v2
+				
+			 - name: Run Super-Linter
+			    uses: github/super-linter@v3
+				env:
+				    DEFAULT_BRANCH: main
+					GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+
+
+
+
+
+
+
 
 
 
